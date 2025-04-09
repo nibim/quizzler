@@ -30,13 +30,37 @@ class ViewController: UIViewController {
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var trueButton: UIButton!
     @IBOutlet weak var falseButton: UIButton!
+    var questionNo = 0
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        trueButton.setTitle("continue", for: .normal)
+        falseButton.isHidden = true
+        
     }
 
     @IBAction func answerButtonClicked(_ sender: UIButton) {
+        trueButton.setTitle("True", for: .normal)
+        falseButton.isHidden = false
+
+        if(sender.currentTitle == quiz[questionNo].answer ){
+            sender.backgroundColor = UIColor.green
+        }else {
+            sender.backgroundColor = UIColor.red
+        }
+        if questionNo + 1 < quiz.count {
+            questionNo += 1
+        } else {
+            questionNo = 0
+        }
+        Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(updateUI), userInfo: nil, repeats: false)
+        
     }
-    
+    @objc func updateUI() {
+        questionLable.text = quiz[questionNo].text
+        trueButton.backgroundColor = UIColor.clear
+        falseButton.backgroundColor = UIColor.clear
+        progressBar.progress = Float(questionNo + 1) / Float(quiz.count)
+    }
 }
 
